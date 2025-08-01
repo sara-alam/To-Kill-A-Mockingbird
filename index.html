@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Kill a Mockingbird - Dark Academia Presentation</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 25%, #2d1b1b 50%, #1a1a1a 75%, #0f0f0f 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #f4f1e8;
+        }
+        
+        .presentation-container {
+            width: 90%;
+            max-width: 1000px;
+            height: 600px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2416 50%, #1a1a1a 100%);
+            border: 2px solid #8b7355;
+            border-radius: 8px;
+            box-shadow: 
+                0 0 30px rgba(139, 115, 85, 0.3),
+                inset 0 0 100px rgba(0,0,0,0.5);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .presentation-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(139, 115, 85, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(101, 67, 33, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        
+        .slide {
+            display: none;
+            width: 100%;
+            height: 100%;
+            padding: 60px;
+            position: relative;
+            color: #f4f1e8;
+        }
+        
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        /* Title Slide */
+        .title-slide {
+            text-align: center;
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 50%, #2d1b1b 100%);
+        }
+        
+        .title-slide h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 3.8em;
+            font-weight: 600;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+            color: #d4af37;
+            letter-spacing: 2px;
+        }
+        
+        .title-slide .subtitle {
+            font-size: 1.6em;
+            opacity: 0.9;
+            font-style: italic;
+            margin-bottom: 40px;
+            color: #c9b587;
+            font-weight: 300;
+        }
+        
+        .title-slide .author {
+            font-size: 1.3em;
+            opacity: 0.8;
+            color: #8b7355;
+            font-weight: 400;
+        }
+        
+        /* Regular slides */
+        .slide h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 2.8em;
+            color: #d4af37;
+            margin-bottom: 40px;
+            text-align: center;
+            border-bottom: 2px solid #8b7355;
+            padding-bottom: 20px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+            letter-spacing: 1px;
+        }
+        
+        .slide h3 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.9em;
+            color: #c9b587;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+        
+        .slide p {
+            font-size: 1.3em;
+            line-height: 1.7;
+            color: #f4f1e8;
+            margin-bottom: 20px;
+            font-weight: 400;
+        }
+        
+        .slide ul {
+            font-size: 1.2em;
+            line-height: 1.9;
+            color: #e8dcc0;
+        }
+        
+        .slide li {
+            margin-bottom: 18px;
+            padding-left: 15px;
+            position: relative;
+        }
+        
+        .slide li::before {
+            content: '▪';
+            color: #8b7355;
+            position: absolute;
+            left: 0;
+            font-size: 1.2em;
+        }
+        
+        /* Two column layout */
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: start;
+        }
+        
+        /* Quote styling */
+        .quote {
+            background: linear-gradient(135deg, rgba(139, 115, 85, 0.2) 0%, rgba(101, 67, 33, 0.2) 100%);
+            padding: 35px;
+            border-left: 4px solid #d4af37;
+            border-top: 1px solid #8b7355;
+            border-bottom: 1px solid #8b7355;
+            font-style: italic;
+            font-size: 1.4em;
+            margin: 30px 0;
+            position: relative;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
+        }
+        
+        .quote::before {
+            content: '"';
+            font-size: 4em;
+            color: #8b7355;
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            opacity: 0.5;
+        }
+        
+        .quote-author {
+            text-align: right;
+            font-weight: 600;
+            margin-top: 20px;
+            color: #c9b587;
+            font-size: 0.9em;
+        }
+        
+        /* Character cards */
+        .character-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+        }
+        
+        .character-card {
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.8) 0%, rgba(45, 36, 22, 0.6) 100%);
+            padding: 30px;
+            border: 1px solid #8b7355;
+            text-align: center;
+            box-shadow: 
+                0 5px 15px rgba(0,0,0,0.5),
+                inset 0 0 20px rgba(139, 115, 85, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .character-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #d4af37, transparent);
+        }
+        
+        .character-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 
+                0 8px 25px rgba(0,0,0,0.7),
+                inset 0 0 30px rgba(139, 115, 85, 0.2);
+        }
+        
+        .character-name {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5em;
+            color: #d4af37;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .character-desc {
+            font-size: 1.1em;
+            color: #e8dcc0;
+            line-height: 1.6;
+            font-weight: 300;
+        }
+        
+        /* Navigation */
+        .nav-container {
+            position: absolute;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .nav-btn {
+            background: linear-gradient(135deg, #8b7355 0%, #654321 100%);
+            color: #f4f1e8;
+            border: 1px solid #d4af37;
+            padding: 12px 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.4);
+        }
+        
+        .nav-btn:hover {
+            background: linear-gradient(135deg, #d4af37 0%, #b8941f 100%);
+            color: #1a1a1a;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.6);
+        }
+        
+        .nav-btn:disabled {
+            background: linear-gradient(135deg, #3a3a3a 0%, #2a2a2a 100%);
+            color: #666;
+            border-color: #444;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+        
+        .slide-counter {
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.9) 0%, rgba(45, 36, 22, 0.8) 100%);
+            padding: 10px 20px;
+            border: 1px solid #8b7355;
+            font-weight: 600;
+            color: #c9b587;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+        }
+        
+        /* Theme highlights */
+        .theme-highlight {
+            background: linear-gradient(45deg, #654321, #8b7355);
+            color: #f4f1e8;
+            padding: 25px;
+            margin: 25px 0;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.2em;
+            box-shadow: 
+                0 5px 15px rgba(0,0,0,0.5),
+                inset 0 0 20px rgba(212, 175, 55, 0.1);
+            border: 1px solid #d4af37;
+            position: relative;
+        }
+        
+        .theme-highlight::before {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            right: 5px;
+            bottom: 5px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+        
+        /* Decorative elements */
+        .slide::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border: 2px solid #8b7355;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+        }
+        
+        /* Academic ornaments */
+        .ornament {
+            position: absolute;
+            color: #8b7355;
+            opacity: 0.3;
+            font-size: 2em;
+        }
+        
+        .ornament-tl {
+            top: 15px;
+            left: 15px;
+        }
+        
+        .ornament-tr {
+            top: 15px;
+            right: 15px;
+        }
+        
+        .ornament-bl {
+            bottom: 15px;
+            left: 15px;
+        }
+        
+        .ornament-br {
+            bottom: 15px;
+            right: 15px;
+        }
+        
+        /* Vintage paper texture overlay */
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 25% 25%, rgba(139, 115, 85, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(101, 67, 33, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Ornaments -->
+        <div class="ornament ornament-tl">❦</div>
+        <div class="ornament ornament-tr">❦</div>
+        <div class="ornament ornament-bl">❦</div>
+        <div class="ornament ornament-br">❦</div>
+        
+        <!-- Slide 1: Title -->
+        <div class="slide active title-slide">
+            <h1>To Kill a Mockingbird</h1>
+            <div class="subtitle">A Study in Moral Courage and the Loss of Innocence</div>
+            <div class="author">Harper Lee</div>
+        </div>
+        
+        <!-- Slide 2: Setting & Context -->
+        <div class="slide">
+            <h2>The Stage of Injustice</h2>
+            <div class="two-column">
+                <div>
+                    <h3>Temporal Setting</h3>
+                    <p><strong>Depression-Era Alabama, 1930s</strong></p>
+                    <p>Maycomb County serves as a microcosm of the American South, where economic desperation intersects with deep-rooted racial hierarchies.</p>
+                    <p>A society built upon unexamined traditions and willful ignorance.</p>
+                </div>
+                <div>
+                    <h3>Historical Milieu</h3>
+                    <p>The shadow of Reconstruction's failure</p>
+                    <p>Jim Crow laws codifying systematic oppression</p>
+                    <p>A legal system designed to perpetuate rather than challenge injustice</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 3: Main Characters -->
+        <div class="slide">
+            <h2>Dramatis Personae</h2>
+            <div class="character-grid">
+                <div class="character-card">
+                    <div class="character-name">Jean Louise "Scout" Finch</div>
+                    <div class="character-desc">Our precocious narrator whose moral awakening forms the novel's emotional core</div>
+                </div>
+                <div class="character-card">
+                    <div class="character-name">Atticus Finch</div>
+                    <div class="character-desc">The embodiment of moral rectitude in an morally bankrupt society</div>
+                </div>
+                <div class="character-card">
+                    <div class="character-name">Tom Robinson</div>
+                    <div class="character-desc">The tragic figure whose destruction reveals the true nature of Maycomb's "justice"</div>
+                </div>
+                <div class="character-card">
+                    <div class="character-name">Arthur "Boo" Radley</div>
+                    <div class="character-desc">The reclusive guardian angel who embodies the novel's theme of hidden goodness</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 4: Central Themes -->
+        <div class="slide">
+            <h2>Thematic Architecture</h2>
+            <div class="theme-highlight">
+                The Corruption of Innocence
+            </div>
+            <p>Lee chronicles the painful transition from childhood's moral clarity to adult complicity in systemic injustice.</p>
+            
+            <div class="theme-highlight">
+                The Solitude of Moral Courage
+            </div>
+            <p>True integrity demands standing alone against the mob, bearing witness to truth when society chooses comfortable lies.</p>
+            
+            <div class="theme-highlight">
+                The Persistence of Evil
+            </div>
+            <p>Prejudice as a malignant force that corrupts communities and destroys the innocent with impunity.</p>
+        </div>
+        
+        <!-- Slide 5: The Trial -->
+        <div class="slide">
+            <h2>The Crucible of Justice</h2>
+            <h3>State of Alabama v. Tom Robinson</h3>
+            <p>The trial serves not merely as plot device, but as moral litmus test—revealing the true character of every citizen in Maycomb's social hierarchy.</p>
+            
+            <div class="quote">
+                You never really understand a person until you consider things from his point of view... until you climb into his skin and walk around in it.
+                <div class="quote-author">— Atticus Finch</div>
+            </div>
+            
+            <p>The verdict was predetermined not by evidence, but by the immutable laws of racial caste—justice sacrificed upon the altar of social order.</p>
+        </div>
+        
+        <!-- Slide 6: Symbolism -->
+        <div class="slide">
+            <h2>Literary Symbolism</h2>
+            <div class="two-column">
+                <div>
+                    <h3>The Mockingbird</h3>
+                    <p>Symbol of innocence and artless beauty in a world that destroys what it cannot understand</p>
+                    <p>Tom Robinson and Boo Radley as society's sacrificial victims</p>
+                    <p>The sin of destroying that which brings only beauty to the world</p>
+                </div>
+                <div>
+                    <h3>The Radley House</h3>
+                    <p>Embodiment of fear born from ignorance and social ostracism</p>
+                    <p>The transformation from object of terror to sanctuary of safety</p>
+                    <p>How isolation breeds both mystery and misunderstanding</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 7: Character Development -->
+        <div class="slide">
+            <h2>The Education of Scout Finch</h2>
+            <h3>Moral Bildungsroman</h3>
+            <ul>
+                <li><strong>From violence to restraint:</strong> Learning that true strength lies in self-control and moral fortitude</li>
+                <li><strong>From prejudice to empathy:</strong> Discovering the humanity in those whom society has demonized</li>
+                <li><strong>From certainty to complexity:</strong> Understanding that moral truth often exists in shades of gray</li>
+            </ul>
+            
+            <p style="margin-top: 30px;">Scout's journey mirrors our own: the gradual, often painful recognition that the world is far more complex and morally ambiguous than childhood's simple categories allow.</p>
+        </div>
+        
+        <!-- Slide 8: Enduring Relevance -->
+        <div class="slide">
+            <h2>Contemporary Resonance</h2>
+            <p>Lee's masterwork transcends its historical moment, speaking to universal questions of justice, courage, and moral responsibility that plague every generation.</p>
+            
+            <div class="quote">
+                The one thing that doesn't abide by majority rule is a person's conscience.
+                <div class="quote-author">— Atticus Finch</div>
+            </div>
+            
+            <p>In our current moment of moral reckoning, the novel's exploration of systemic injustice and individual moral courage remains achingly relevant.</p>
+        </div>
+        
+        <!-- Slide 9: Critical Questions -->
+        <div class="slide">
+            <h2>Points of Inquiry</h2>
+            <ul>
+                <li>How does Lee employ Scout's limited perspective to expose adult moral failures and societal hypocrisies?</li>
+                <li>Should we view Atticus as moral paragon or as a more complex figure shaped by his historical moment?</li>
+                <li>What role does social class play in reinforcing racial hierarchies within Maycomb's social architecture?</li>
+                <li>How does the parallel treatment of Boo Radley and Tom Robinson illuminate the novel's central themes?</li>
+                <li>What is the cost of moral courage, and is that cost justified by its outcomes?</li>
+            </ul>
+        </div>
+        
+        <!-- Slide 10: Conclusion -->
+        <div class="slide title-slide">
+            <h1>Finis</h1>
+            <div class="subtitle">"Until I feared I would lose it, I never loved to read. One does not love breathing."</div>
+            <div class="author">— Scout Finch</div>
+        </div>
+        
+        <!-- Navigation -->
+        <div class="nav-container">
+            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+            <span class="slide-counter">
+                <span id="currentSlide">1</span> / <span id="totalSlides">10</span>
+            </span>
+            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+        </div>
+    </div>
+    
+    <script>
+        let currentSlideIndex = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        
+        document.getElementById('totalSlides').textContent = totalSlides;
+        
+        function showSlide(index) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[index].classList.add('active');
+            
+            document.getElementById('currentSlide').textContent = index + 1;
+            document.getElementById('prevBtn').disabled = index === 0;
+            document.getElementById('nextBtn').disabled = index === totalSlides - 1;
+        }
+        
+        function changeSlide(direction) {
+            const newIndex = currentSlideIndex + direction;
+            if (newIndex >= 0 && newIndex < totalSlides) {
+                currentSlideIndex = newIndex;
+                showSlide(currentSlideIndex);
+            }
+        }
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowLeft') {
+                changeSlide(-1);
+            } else if (event.key === 'ArrowRight') {
+                changeSlide(1);
+            }
+        });
+        
+        // Initialize
+        showSlide(0);
+        
+        // Add vintage typewriter effect to title (optional)
+        document.addEventListener('DOMContentLoaded', function() {
+            const titleElements = document.querySelectorAll('.title-slide h1');
+            titleElements.forEach(el => {
+                el.style.borderRight = '2px solid #d4af37';
+                el.style.animation = 'blink 1s infinite';
+            });
+        });
+        
+        // Add CSS for blinking cursor
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes blink {
+                0%, 50% { border-color: #d4af37; }
+                51%, 100% { border-color: transparent; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
